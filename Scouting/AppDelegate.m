@@ -17,6 +17,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    // Allow saving via Parse
+    
+    [Parse enableLocalDatastore];
+    [Parse setApplicationId:@"8ExTEoeHhV5ANaA9wBHJ8ZAgBpJYIQvbKQ8m4P87"
+                  clientKey:@"218c1A4anSh9cAgiyJjBIS8wPfKEUXkF2za754lf"];
+    
+//    // By default, all users are allowed to modify all objects.
+//    ParseUser.enableAutomaticUser();
+//    ParseACL defaultACL = new ParseACL();
+//    defaultACL.setPublicReadAccess(true);
+//    ParseACL.setDefaultACL(defaultACL, true);
     return YES;
 }
 
