@@ -8,8 +8,6 @@
 
 #import "AchievementDefinitionsTableViewController.h"
 #import "AchievementDefinition.h"
-#include<unistd.h>
-#include<netdb.h>
 
 @interface AchievementDefinitionsTableViewController ()
 
@@ -17,62 +15,7 @@
 
 @implementation AchievementDefinitionsTableViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    // Get the achievement definitions from the network in case they have changed from what is pinned.  If we get something, pin them and request a reload of the data.
-    // Configure Refresh Control
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    [self.refreshControl addTarget:self action:@selector(refreshAchievementDefinitions) forControlEvents:UIControlEventValueChanged];
-//    [self refreshAchievementDefinitions];
-//    PFQuery *queryFromParse = [PFQuery queryWithClassName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION];
-//    [queryFromParse findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-//        if (error)
-//        {
-//            NSLog(@"Error in viewDidLoad (over network) - AchievementDefinitionsTableViewController");
-//        }
-//        else
-//        {
-//            [PFObject pinAllInBackground:objects];
-//            [self.tableView reloadData];
-//        }
-//    }];
-}
--(void)viewDidAppear:(BOOL)animated
-{
-    [self refreshAchievementDefinitions];
-}
-- (PFQuery *)baseQuery
-{
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    return query;
-}
-
-- (void)refreshAchievementDefinitions
-{
-    [[self baseQuery] findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (error)
-        {
-            [self.refreshControl endRefreshing];
-        }
-        else
-        {
-            
-            [PFObject unpinAllObjectsInBackgroundWithName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION block:^(BOOL succeeded, NSError *error) {
-                [PFObject pinAllInBackground:objects withName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION block:^(BOOL succeeded, NSError *error) {
-                    [self.refreshControl endRefreshing];
-                    [self loadObjects];
-                }];
-            }];
-        }
-    }];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#pragma mark - View Creation
 
 -(id)initWithCoder:(NSCoder *)aDecoder
 {
@@ -92,34 +35,56 @@
     return self;
 }
 
+#pragma mark - View Lifecycle
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Configure Refresh Control
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refreshAchievementDefinitions) forControlEvents:UIControlEventValueChanged];
+}
+-(void)viewDidAppear:(BOOL)animated
+{
+    [self refreshAchievementDefinitions];
+}
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Refresh
+- (PFQuery *)baseQuery
+{
+    // Return a query that finds all AchievementDefinitions.
+    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    return query;
+}
+- (void)refreshAchievementDefinitions
+{
+    // Look for AchievementDefinitions on the network
+    [[self baseQuery] findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (error)
+        {
+            [self.refreshControl endRefreshing];
+        }
+        else
+        {
+            // Pin all the AchievementDefinitions obtained from the network on this device and trigger a reload of the table
+            [PFObject unpinAllObjectsInBackgroundWithName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION block:^(BOOL succeeded, NSError *error) {
+                [PFObject pinAllInBackground:objects withName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION block:^(BOOL succeeded, NSError *error) {
+                    [self.refreshControl endRefreshing];
+                    [self loadObjects];
+                }];
+            }];
+        }
+    }];
+}
 -(PFQuery *)queryForTable
 {
-    //PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    //if (![self isNetworkAvailable])
-    //{
+    // Look at just AchievementDefinitions stored on the device locally for the canned loading done by this view
     return [[self baseQuery] fromLocalDatastore];
-    //}
-    //return query;
 }
-//-(BOOL)isNetworkAvailable
-//{
-//    char *hostname;
-//    struct hostent *hostinfo;
-//    hostname = "google.com";
-//    hostinfo = gethostbyname (hostname);
-//    if (hostinfo == NULL){
-//        NSLog(@"-> no connection!\n");
-//        return NO;
-//    }
-//    else{
-//        NSLog(@"-> connection established!\n");
-//        return YES;
-//    }
-//}
-//    -(BOOL) isInternetReachable
-//{
-//    return [AFNetworkReachabilityManager sharedManager].reachable;
-//}
+
+#pragma mark - Load the cells
 -(PFTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object
 {
     // Obtain a cell
