@@ -37,11 +37,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="QDu-eW-0tS">
+                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                            <items>
+                                <barButtonItem style="plain" systemItem="flexibleSpace" id="xad-gF-psG"/>
+                                <barButtonItem title="Edit" id="5U6-lD-YnO">
+                                    <connections>
+                                        <action selector="editAchievementDefinitions:" destination="J4J-v2-NGj" id="35i-Ut-VTb"/>
+                                    </connections>
+                                </barButtonItem>
+                            </items>
+                        </toolbar>
                         <connections>
                             <outlet property="dataSource" destination="J4J-v2-NGj" id="VFs-6H-VAR"/>
                             <outlet property="delegate" destination="J4J-v2-NGj" id="apX-Nh-9Jo"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <outlet property="editButton" destination="5U6-lD-YnO" id="nbT-CV-iey"/>
+                        <outlet property="toolbar" destination="QDu-eW-0tS" id="9wu-mA-grY"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xgh-qH-AXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

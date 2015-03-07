@@ -10,6 +10,9 @@
 #import "AchievementDefinition.h"
 
 @interface AchievementDefinitionsTableViewController ()
+- (IBAction)editAchievementDefinitions:(UIBarButtonItem *)sender;
+@property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
+@property (strong, nonatomic) IBOutlet UIBarButtonItem *editButton;
 
 @end
 
@@ -41,6 +44,7 @@
     // Configure Refresh Control
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(refreshAchievementDefinitions) forControlEvents:UIControlEventValueChanged];
+    self.tableView.tableHeaderView = self.toolbar;
 }
 -(void)viewDidAppear:(BOOL)animated
 {
@@ -103,6 +107,34 @@
     return (PFTableViewCell *)cell;
 
 }
+
+#pragma mark - Edit List
+- (IBAction)editAchievementDefinitions:(UIBarButtonItem *)sender
+{
+    if (self.tableView.editing) {
+        [self.tableView setEditing:NO animated:YES];
+        [sender setTitle:@"Edit"];
+    }
+    else
+    {
+        [self.tableView setEditing:YES animated:YES];
+        [sender setTitle:@"Done"];
+    }
+}
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        AchievementDefinition *achievementDefinition = (AchievementDefinition *)[self.objects objectAtIndex:indexPath.row];
+        [achievementDefinition deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            //[achievementDefinition unpinInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                [self loadObjects];
+            //}];
+            //TODO: Need to deal with ACL - way to give some users permission to delete requirements.  Or edit them?
+        }];
+    }
+}
+    
 
 /*
 #pragma mark - Navigation
