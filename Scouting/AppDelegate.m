@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 
+//#import <AFNetworkReachabilityManager.h>
+
 @interface AppDelegate ()
 
 @end
@@ -29,8 +31,31 @@
 //    ParseACL defaultACL = new ParseACL();
 //    defaultACL.setPublicReadAccess(true);
 //    ParseACL.setDefaultACL(defaultACL, true);
+    
+//    [[AFNetworkReachabilityManager sharedManager] startMonitoring];
+//    
+//    [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
+//        
+//        NSLog(@"Reachability changed: %@", AFStringFromNetworkReachabilityStatus(status));
+//        
+//        
+//        switch (status) {
+//            case AFNetworkReachabilityStatusReachableViaWWAN:
+//            case AFNetworkReachabilityStatusReachableViaWiFi:
+//                // -- Reachable -- //
+//                NSLog(@"Reachable");
+//                break;
+//            case AFNetworkReachabilityStatusNotReachable:
+//            default:
+//                // -- Not reachable -- //
+//                NSLog(@"Not Reachable");
+//                break;
+//        }
+//        
+//    }];
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

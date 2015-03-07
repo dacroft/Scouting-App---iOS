@@ -14,6 +14,7 @@
 + (NSString *) parseClassName;
 
 extern NSString * const PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION;
+extern NSString * const PARSE_CLASS_PARAM_ACHIEVEMENT_DEFINITION_TITLE;
 
 #pragma mark - Properties
 @property (strong, nonatomic) NSString *title;

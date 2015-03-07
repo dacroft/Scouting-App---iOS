@@ -6,7 +6,10 @@
 //  Copyright (c) 2015 Doug Croft. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "PFQueryTableViewController.h"
 
-@interface AchievementDefinitionsTableViewController : UITableViewController 
+@interface AchievementDefinitionsTableViewController : PFQueryTableViewController
+
+
+
 @end

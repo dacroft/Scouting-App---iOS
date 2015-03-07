@@ -18,8 +18,8 @@
 		9153F6B11A9D894600364F6F /* Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9153F6B01A9D894600364F6F /* Logo.png */; };
 		9153F6B61A9D8A3600364F6F /* SCLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9153F6B51A9D8A3600364F6F /* SCLoginViewController.m */; };
 		9153F6B91A9D8EC200364F6F /* SCSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9153F6B81A9D8EC200364F6F /* SCSignUpViewController.m */; };
-		918106D31AAB396700FD3002 /* AchievementDefinitionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 918106D21AAB396700FD3002 /* AchievementDefinitionsTableViewController.m */; };
 		918106D71AAB3ABF00FD3002 /* AchievementDefinition.m in Sources */ = {isa = PBXBuildFile; fileRef = 918106D61AAB3ABF00FD3002 /* AchievementDefinition.m */; };
+		91DB66511AAB8A7000E6DB8E /* AchievementDefinitionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 91DB66501AAB8A7000E6DB8E /* AchievementDefinitionsTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,10 +52,10 @@
 		9153F6B51A9D8A3600364F6F /* SCLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCLoginViewController.m; sourceTree = "<group>"; };
 		9153F6B71A9D8EC200364F6F /* SCSignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SCSignUpViewController.h; sourceTree = "<group>"; };
 		9153F6B81A9D8EC200364F6F /* SCSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SCSignUpViewController.m; sourceTree = "<group>"; };
-		918106D11AAB396700FD3002 /* AchievementDefinitionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievementDefinitionsTableViewController.h; sourceTree = "<group>"; };
-		918106D21AAB396700FD3002 /* AchievementDefinitionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AchievementDefinitionsTableViewController.m; sourceTree = "<group>"; };
 		918106D51AAB3ABF00FD3002 /* AchievementDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievementDefinition.h; sourceTree = "<group>"; };
 		918106D61AAB3ABF00FD3002 /* AchievementDefinition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AchievementDefinition.m; sourceTree = "<group>"; };
+		91DB664F1AAB8A7000E6DB8E /* AchievementDefinitionsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AchievementDefinitionsTableViewController.h; sourceTree = "<group>"; };
+		91DB66501AAB8A7000E6DB8E /* AchievementDefinitionsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AchievementDefinitionsTableViewController.m; sourceTree = "<group>"; };
 		C0CA90832D1C53C2B17A8096 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD80FFAF8F8F5C1C5138BB82 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		EBC059B6B1AA1A6E7F0702DC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
@@ -185,8 +185,8 @@
 		918106CD1AAB34AE00FD3002 /* AchievementDefinitions */ = {
 			isa = PBXGroup;
 			children = (
-				918106D11AAB396700FD3002 /* AchievementDefinitionsTableViewController.h */,
-				918106D21AAB396700FD3002 /* AchievementDefinitionsTableViewController.m */,
+				91DB664F1AAB8A7000E6DB8E /* AchievementDefinitionsTableViewController.h */,
+				91DB66501AAB8A7000E6DB8E /* AchievementDefinitionsTableViewController.m */,
 			);
 			name = AchievementDefinitions;
 			sourceTree = "<group>";
@@ -345,7 +345,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				918106D71AAB3ABF00FD3002 /* AchievementDefinition.m in Sources */,
-				918106D31AAB396700FD3002 /* AchievementDefinitionsTableViewController.m in Sources */,
+				91DB66511AAB8A7000E6DB8E /* AchievementDefinitionsTableViewController.m in Sources */,
 				9153F6B91A9D8EC200364F6F /* SCSignUpViewController.m in Sources */,
 				9153F6B61A9D8A3600364F6F /* SCLoginViewController.m in Sources */,
 				9110A6DC1A9D697A00184E17 /* ViewController.m in Sources */,

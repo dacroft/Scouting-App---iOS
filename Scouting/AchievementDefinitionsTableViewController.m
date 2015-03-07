@@ -8,79 +8,63 @@
 
 #import "AchievementDefinitionsTableViewController.h"
 #import "AchievementDefinition.h"
+#include<unistd.h>
+#include<netdb.h>
 
 @interface AchievementDefinitionsTableViewController ()
-@property (strong, nonatomic) NSMutableArray *achievementDefinitionsArray;
 
 @end
 
 @implementation AchievementDefinitionsTableViewController
 
-#pragma mark - Lazy Instantiation
--(NSMutableArray *)achievementDefinitionsArray
-{
-    if (_achievementDefinitionsArray)
-    {
-        return _achievementDefinitionsArray;
-    }
-    else
-    {
-        _achievementDefinitionsArray = [@{} mutableCopy];
-    }
-    return _achievementDefinitionsArray;
-}
-
-#pragma mark - View Lifecycle
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    // Get the achievement definitions from the network in case they have changed from what is pinned.  If we get something, pin them and request a reload of the data.
+    // Configure Refresh Control
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refreshAchievementDefinitions) forControlEvents:UIControlEventValueChanged];
+//    [self refreshAchievementDefinitions];
+//    PFQuery *queryFromParse = [PFQuery queryWithClassName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION];
+//    [queryFromParse findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+//        if (error)
+//        {
+//            NSLog(@"Error in viewDidLoad (over network) - AchievementDefinitionsTableViewController");
+//        }
+//        else
+//        {
+//            [PFObject pinAllInBackground:objects];
+//            [self.tableView reloadData];
+//        }
+//    }];
 }
 -(void)viewDidAppear:(BOOL)animated
 {
-    // Form the local datastore query for achievement definitions
-    PFQuery *queryFromLocalDatastore = [PFQuery queryWithClassName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION];
-    [queryFromLocalDatastore fromLocalDatastore];
-    
-    // Load the local list of achievement definitions
-    [queryFromLocalDatastore findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    [self refreshAchievementDefinitions];
+}
+- (PFQuery *)baseQuery
+{
+    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    return query;
+}
+
+- (void)refreshAchievementDefinitions
+{
+    [[self baseQuery] findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (error)
         {
-            NSLog(@"Error in viewDidAppear (from cached) - AchievementDefinitionsTableViewController");
+            [self.refreshControl endRefreshing];
         }
         else
         {
-            if ([objects count]>0) {
-                self.achievementDefinitionsArray = [objects mutableCopy];
-                [self.tableView reloadData];
-            }
-            else
-            {
-                // Form the query for achievement definitions
-                PFQuery *queryFromParse = [PFQuery queryWithClassName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION];
             
-                // Load the list of achievement definitions
-                [queryFromParse findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                    if (error)
-                    {
-                        NSLog(@"Error in viewDidAppear (over network) - AchievementDefinitionsTableViewController");
-                    }
-                    else
-                    {
-                        self.achievementDefinitionsArray = [objects mutableCopy];
-                        [PFObject pinAllInBackground:self.achievementDefinitionsArray];
-                        [self.tableView reloadData];
-                    }
+            [PFObject unpinAllObjectsInBackgroundWithName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION block:^(BOOL succeeded, NSError *error) {
+                [PFObject pinAllInBackground:objects withName:PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION block:^(BOOL succeeded, NSError *error) {
+                    [self.refreshControl endRefreshing];
+                    [self loadObjects];
                 }];
-            }
+            }];
         }
     }];
 }
@@ -90,67 +74,70 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 1;
+-(id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self)
+    {
+        // The className to query on
+        self.parseClassName = PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION;
+        
+        // The key of the PFObject to display in the label of the default cell style
+        self.textKey = PARSE_CLASS_PARAM_ACHIEVEMENT_DEFINITION_TITLE;
+        
+        // Enable Pull to refresh, but disable pagination
+        self.pullToRefreshEnabled = NO;
+        self.paginationEnabled = NO;
+    }
+    return self;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Return the number of rows in the section.
-    return [self.achievementDefinitionsArray count];
+-(PFQuery *)queryForTable
+{
+    //PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    //if (![self isNetworkAvailable])
+    //{
+    return [[self baseQuery] fromLocalDatastore];
+    //}
+    //return query;
 }
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+//-(BOOL)isNetworkAvailable
+//{
+//    char *hostname;
+//    struct hostent *hostinfo;
+//    hostname = "google.com";
+//    hostinfo = gethostbyname (hostname);
+//    if (hostinfo == NULL){
+//        NSLog(@"-> no connection!\n");
+//        return NO;
+//    }
+//    else{
+//        NSLog(@"-> connection established!\n");
+//        return YES;
+//    }
+//}
+//    -(BOOL) isInternetReachable
+//{
+//    return [AFNetworkReachabilityManager sharedManager].reachable;
+//}
+-(PFTableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object
+{
     // Obtain a cell
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"achievementDefinitionCell" forIndexPath:indexPath];
+    static NSString *cellIdentifier = @"achievementDefinitionCell";
+    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
     
     // Obtain an AchievementDefinition
-    AchievementDefinition *achievementDefinition = self.achievementDefinitionsArray[indexPath.row];
+    AchievementDefinition *achievementDefinition = (AchievementDefinition *)object;
     
     // Configure the cell
     cell.textLabel.text = achievementDefinition.title;
     
-    return cell;
-}
+    return (PFTableViewCell *)cell;
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
 }
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation

@@ -20,7 +20,7 @@
                     <navigationItem key="navigationItem" id="Ahk-e2-VaP">
                         <barButtonItem key="rightBarButtonItem" title="Achievement Definitions" id="vHV-yg-1Ml">
                             <connections>
-                                <segue destination="J4J-v2-NGj" kind="show" id="Nav-aC-txg"/>
+                                <segue destination="J4J-v2-NGj" kind="show" id="C8Z-N9-lsD"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -37,14 +37,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="achievementDefinitionCell" id="Sr3-tJ-Elc">
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Sr3-tJ-Elc" id="9O5-dK-9Nj">
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="J4J-v2-NGj" id="VFs-6H-VAR"/>
                             <outlet property="delegate" destination="J4J-v2-NGj" id="apX-Nh-9Jo"/>
@@ -53,7 +45,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xgh-qH-AXf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1922" y="368"/>
+            <point key="canvasLocation" x="1931" y="368"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="rJ0-BB-BfX">

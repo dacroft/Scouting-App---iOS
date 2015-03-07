@@ -25,5 +25,6 @@ NSString * const PARSE_CLASS_NAME_ACHIEVEMENT_DEFINITION = @"AchievementDefiniti
 }
 
 #pragma mark - Properties
+NSString * const PARSE_CLASS_PARAM_ACHIEVEMENT_DEFINITION_TITLE = @"title";
 @dynamic title;
 @end
